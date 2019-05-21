@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageButton
+            android:id="@+id/edit_remove_wordinfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/ic_action_remove"
+            android:visibility="gone"
+            android:background="#FFFFFF"
+            app:layout_constraintBottom_toTopOf="@+id/guide_edit_wordinfo_top"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/word_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:textSize="@dimen/h5"
+            android:text="@string/word_type"
+            app:layout_constraintBottom_toBottomOf="@+id/edit_type"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/edit_type" />
+
+        <Spinner
+            android:id="@+id/edit_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:textSize="@dimen/h5"
+            app:layout_constraintBottom_toTopOf="@+id/guide_edit_wordinfo_top"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guide_edit_wordinfo_start"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_edit_wordinfo_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="44dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_edit_wordinfo_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="90dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_edit_wordinfo_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="39dp" />
+
+        <TextView
+            android:id="@+id/edit_text_pron_us"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_pron_us"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:textSize="@dimen/h5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guide_edit_wordinfo_top" />
+
+        <TextView
+            android:id="@+id/edit_pron_us"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="PRON_US"
+            android:textSize="@dimen/h5"
+            app:layout_constraintBottom_toBottomOf="@+id/edit_text_pron_us"
+            app:layout_constraintEnd_toStartOf="@+id/guide_edit_wordinfo_end"
+            app:layout_constraintStart_toStartOf="@+id/guide_edit_wordinfo_start"
+            app:layout_constraintTop_toTopOf="@+id/edit_text_pron_us" />
+
+        <TextView
+            android:id="@+id/edit_text_pron_uk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/text_pron_uk"
+            android:textSize="@dimen/h5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edit_text_pron_us" />
+
+        <TextView
+            android:id="@+id/edit_pron_uk"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="PRON_UK"
+            android:textSize="@dimen/h5"
+            app:layout_constraintBottom_toBottomOf="@+id/edit_text_pron_uk"
+            app:layout_constraintEnd_toStartOf="@+id/guide_edit_wordinfo_end"
+            app:layout_constraintStart_toStartOf="@+id/guide_edit_wordinfo_start"
+            app:layout_constraintTop_toTopOf="@+id/edit_text_pron_uk" />
+
+        <TextView
+            android:id="@+id/edit_text_mean_kr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/mean_kr"
+            android:textSize="@dimen/h5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edit_text_pron_uk" />
+
+        <EditText
+            android:id="@+id/edit_mean_kr"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:textSize="@dimen/h5"
+            app:layout_constraintEnd_toStartOf="@+id/guide_edit_wordinfo_end"
+            app:layout_constraintStart_toStartOf="@+id/guide_edit_wordinfo_start"
+            app:layout_constraintTop_toTopOf="@+id/edit_text_mean_kr" />
+
+        <TextView
+            android:id="@+id/edit_text_mean_en"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/mean_en"
+            android:textSize="@dimen/h5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edit_mean_kr" />
+
+        <EditText
+            android:id="@+id/edit_mean_en"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:textSize="@dimen/h5"
+            app:layout_constraintEnd_toStartOf="@+id/guide_edit_wordinfo_end"
+            app:layout_constraintStart_toStartOf="@+id/guide_edit_wordinfo_start"
+            app:layout_constraintTop_toTopOf="@+id/edit_text_mean_en" />
+
+        <TextView
+            android:id="@+id/edit_usages"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/edit_usages"
+            android:textSize="@dimen/h5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edit_mean_en" />
+
+        <ImageButton
+            android:id="@+id/imageButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/usage_recycler"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <ImageButton
+            android:id="@+id/edit_add_usage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="#FFFFFF"
+            android:src="@drawable/ic_action_add"
+            app:layout_constraintBottom_toTopOf="@+id/usage_recycler"
+            app:layout_constraintEnd_toEndOf="@+id/imageButton2"
+            app:layout_constraintStart_toStartOf="@+id/imageButton2" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/usage_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edit_usages"
+            app:layout_constraintVertical_weight="1"></androidx.recyclerview.widget.RecyclerView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
+

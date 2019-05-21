@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="./chartist.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="./chartist.min.css">
+    </head>
+    <body>
+        <div class="ct-chart ct-perfect-fourth"></div>
+        <script>
+            function fn_line(l, s, o) {
+                var data = {
+                    labels: l,
+                    series: s
+                }
+                new Chartist.Line('.ct-chart', data, o);
+            }
+
+            function fn_bar(l, s, o) {
+                var data = {
+                    labels: l,
+                    series: s
+                }
+                new Chartist.Bar('.ct-chart', data, o);
+            }
+
+            function fn_pie(l, s, o) {
+                var data = {
+                    labels: l,
+                    series: s
+                }
+                new Chartist.Pie('.ct-chart', data, o);
+            }
+        </script>
+    </body>
+</html>

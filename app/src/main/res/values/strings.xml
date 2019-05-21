@@ -1,0 +1,36 @@
+<resources>
+	<string name="app_name">Dictionary</string>
+	<string name="navigation_drawer_open">Open navigation drawer</string>
+	<string name="navigation_drawer_close">Close navigation drawer</string>
+	<string name="nav_header_title">Android Studio</string>
+	<string name="nav_header_subtitle">android.studio@android.com</string>
+	<string name="nav_header_desc">Navigation header</string>
+	<string name="action_settings">Settings</string>
+
+	<string name="mean_kr">뜻(한국어)</string>
+	<string name="mean_en">뜻(영어)</string>
+
+	<string name="edit_query">단어 명</string>
+	<string name="button_query">검색</string>
+
+	<string name="text_pron_us">US</string>
+	<string name="text_pron_uk">UK</string>
+
+	<string name="add_to_note">단어장에 추가</string>
+	<string name="delete_from_note">단어장에서 삭제</string>
+
+	<string name="nuke_table">단어장 비우기</string>
+	<string name="word_type">품사</string>
+	<string name="edit_usages">용례</string>
+    <string name="edit_note">단어 수정</string>
+	<string name="button_finish_edit">수정 완료</string>
+	<string name="button_finish_create">추가 완료</string>
+	<string name="word_from_web">웹 단어</string>
+	<string name="word_from_local">내 단어</string>
+
+	<string name="nav_query">웹 단어 검색</string>
+	<string name="nav_note">단어장 탐색</string>
+	<string name="nav_history">최근에 본 단어</string>
+	<string name="nav_settings">설정</string>
+	<string name="text_seen_count">찾아본 횟수</string>
+</resources>

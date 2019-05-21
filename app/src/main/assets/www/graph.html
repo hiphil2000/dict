@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="./chartist.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="./chartist.min.css">
+        <style>
+            body, html {
+                padding: 0;
+                margin: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="ct-chart ct-perfect-fourth"></div>
+        <script>
+            function fn_makeGraph(type, labs, ...sers) {
+                    var series = []
+                    for(var i = 0; i < sers.length; i++) {
+                        series.push(stringToArray(sers[i], true));
+                    }
+                    var data = {
+                        'labels': stringToArray(labs, false),
+                        'series': series
+                    }
+                    var options = {
+                        height: '100%'
+                    };
+                    if (type == 'line') {
+                        new Chartist.Line('.ct-chart', data, options);
+                    } else if (type == 'bar') {
+                        new Chartist.Bar('.ct-chart', data, options);
+                    } else if (type == 'pie') {
+                        new Chartist.Pie('.ct-chart', data, options);
+                    }
+                }
+
+                function stringToArray(str, isNumber) {
+                    arr = str.split(',');
+                    if (isNumber == true) {
+                        for (var i = 0; i < arr.length; i++) {
+                            arr[i] *= 1;
+                        }
+                    }
+                    return arr;
+                }
+        </script>
+    </body>
+</html>

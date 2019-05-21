@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="part_of_word">
+        <item>noun</item>
+        <item>pronoun</item>
+        <item>verb</item>
+        <item>adjective</item>
+        <item>adverb</item>
+        <item>preposition</item>
+        <item>conjunction</item>
+        <item>interjection</item>
+        <item>exclamation</item>
+    </string-array>
+</resources>
