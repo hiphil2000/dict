@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dictionary.Model.RoomDB.Entity.Log;
+import com.example.dictionary.Model.RoomDB.Entity.Video;
 import com.example.dictionary.Model.RoomDB.Entity.Word;
 import com.example.dictionary.Presenter.MainPresenter;
 import com.example.dictionary.Presenter.MainPresenterImpl;
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity
     private FragmentManager fragManager;
     private FragmentQuery fragWeb;
     private FragmentQuery fragLocal;
+    private FragmentQuery fragYoutube;
     private FragmentHistory fragHistory;
 
     @Override
@@ -79,8 +81,9 @@ public class MainActivity extends AppCompatActivity
 
     private void init_view() {
         fragManager = getSupportFragmentManager();
-        fragWeb = new FragmentQuery(this, false);
-        fragLocal = new FragmentQuery(this, true);
+        fragWeb = new FragmentQuery(this, false, R.id.nav_query);
+        fragLocal = new FragmentQuery(this, true, R.id.nav_note);
+        fragYoutube = new FragmentQuery(this, true, R.id.nav_youtube);
         fragHistory = new FragmentHistory(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -133,8 +136,11 @@ public class MainActivity extends AppCompatActivity
                 case R.id.nav_note:
                     switchFragment(2);
                     return true;
-                case R.id.nav_history:
+                case R.id.nav_youtube:
                     switchFragment(3);
+                    return true;
+                case R.id.nav_history:
+                    switchFragment(4);
                     return true;
             }
             return false;
@@ -151,8 +157,11 @@ public class MainActivity extends AppCompatActivity
             case 2:
                 fr = fragLocal;
                 break;
-            default:
             case 3:
+                fr = fragYoutube;
+                break;
+            default:
+            case 4:
                 fr = fragHistory;
                 break;
         }
@@ -292,6 +301,11 @@ public class MainActivity extends AppCompatActivity
 //                }
 //            }
 //        }
+    }
+
+    @Override
+    public void addVideoQueryResultList(List<Video> videos) {
+        // now use here
     }
 
     @Override

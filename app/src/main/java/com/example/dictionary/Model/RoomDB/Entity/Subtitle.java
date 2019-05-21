@@ -28,7 +28,7 @@ public class Subtitle {
     public long Subtitle_ID;
 
     @NonNull
-    public long Video_ID;
+    public String Video_ID;
 
     public int Subtitle_StartTime;
 

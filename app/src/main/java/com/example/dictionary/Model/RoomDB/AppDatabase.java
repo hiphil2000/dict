@@ -4,6 +4,7 @@ import androidx.room.Database;
 import androidx.room.RoomDatabase;
 
 import com.example.dictionary.Model.RoomDB.DAO.LogDAO;
+import com.example.dictionary.Model.RoomDB.DAO.VideoDAO;
 import com.example.dictionary.Model.RoomDB.DAO.WordDAO;
 import com.example.dictionary.Model.RoomDB.Entity.Highlight;
 import com.example.dictionary.Model.RoomDB.Entity.Log;
@@ -25,10 +26,11 @@ import com.example.dictionary.Model.RoomDB.Entity.Word;
                 Subtitle.class,
                 Highlight.class
         },
-        version = 2
+        version = 4
 )
 public abstract class AppDatabase extends RoomDatabase {
     public abstract WordDAO getWordNoteDAO();
     public abstract LogDAO getLogDAO();
+    public abstract VideoDAO getVideoDAO();
 
 }

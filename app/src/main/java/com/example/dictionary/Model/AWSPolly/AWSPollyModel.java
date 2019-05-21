@@ -1,4 +1,4 @@
-package com.example.dictionary.Model;
+package com.example.dictionary.Model.AWSPolly;
 
 import android.content.Context;
 import android.util.Base64;

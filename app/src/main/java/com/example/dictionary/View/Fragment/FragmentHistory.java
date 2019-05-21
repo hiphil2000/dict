@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.dictionary.Model.RoomDB.Entity.Video;
 import com.example.dictionary.Model.RoomDB.Entity.Word;
 import com.example.dictionary.Presenter.MainPresenter;
 import com.example.dictionary.Presenter.MainPresenterImpl;
@@ -108,6 +109,10 @@ public class FragmentHistory extends Fragment implements MainPresenter.View {
 
     @Override
     public void addQueryResultList(List<Word> wordInfos) {
+    }
+
+    @Override
+    public void addVideoQueryResultList(List<Video> videos) {
     }
 
     @Override

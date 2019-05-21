@@ -3,10 +3,11 @@ package com.example.dictionary.Presenter;
 import android.app.Activity;
 import android.os.Handler;
 
-import com.example.dictionary.Model.RoomDB.Entity.Log;
+import com.example.dictionary.Model.RoomDB.Entity.Video;
 import com.example.dictionary.Model.RoomDB.Entity.Word;
 import com.example.dictionary.Model.RoomDB.Model;
-import com.example.dictionary.Model.TwinWordDictModel;
+import com.example.dictionary.Model.TwinWordDict.TwinWordDictModel;
+import com.example.dictionary.Model.YoutubeDataApi.YoutubeDataApiModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ public class MainPresenterImpl implements MainPresenter {
     private Activity activity;
     private MainPresenter.View view;
     private TwinWordDictModel dictModel;
+    private YoutubeDataApiModel youtubeModel;
     private Model DBModel;
     private Handler mainHandler;
 
@@ -62,6 +64,38 @@ public class MainPresenterImpl implements MainPresenter {
     }
 
     @Override
+    public void videoSearch(String query, boolean localOnly) {
+        final String q = query;
+        Runnable webrun = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    List<Video> result = new ArrayList<>();
+                    //result.addAll(youtubeModel.Search(q.trim()));
+                    callback(result, "SearchYoutube-Web");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        Runnable localrun = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    List<Video> result = new ArrayList<>();
+                    result.addAll(DBModel.GetVideos(q.trim()));
+                    callback(result, "SearchYoutube-Local");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        if (!localOnly)
+            new Thread(webrun).start();
+        new Thread(localrun).start();
+    }
+
+    @Override
     public void getViewLogs() {
         new Thread(new Runnable() {
             @Override
@@ -97,6 +131,11 @@ public class MainPresenterImpl implements MainPresenter {
     }
 
     @Override
+    public void addVideo(Video video) {
+
+    }
+
+    @Override
     public void deleteFromNote(final Word word) {
         Runnable r = new Runnable() {
             @Override
@@ -112,6 +151,11 @@ public class MainPresenterImpl implements MainPresenter {
     }
 
     @Override
+    public void deleteVideo(Video video) {
+
+    }
+
+    @Override
     public void showNotes() {
         Runnable r = new Runnable() {
             @Override
@@ -124,6 +168,11 @@ public class MainPresenterImpl implements MainPresenter {
             }
         };
         new Thread(r).start();
+    }
+
+    @Override
+    public void showVideos() {
+
     }
 
     @Override
@@ -144,14 +193,22 @@ public class MainPresenterImpl implements MainPresenter {
     @Override
     public void callback(final List<?> listCallback, String callbackType) {
         if (callbackType != null) {
-            if (callbackType.split("-")[0].equals("Search")) {
+            String type = callbackType.split("-")[0];
+            if (type.equals("Search")) {
                 mainHandler.post(new Runnable() {
                     @Override
                     public void run() {
                         view.addQueryResultList((List<Word>) listCallback);
                     }
                 });
-            } else if(callbackType.split("-")[0].equals("Log")) {
+            } else if (type.equals("SearchYoutube")) {
+                mainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        view.addVideoQueryResultList((List<Video>) listCallback);
+                    }
+                });
+            } else if (type.equals("Log")) {
                 mainHandler.post(new Runnable() {
                     @Override
                     public void run() {

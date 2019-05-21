@@ -1,7 +1,8 @@
-package com.example.dictionary.Model;
+package com.example.dictionary.Model.TwinWordDict;
 
 import android.content.Context;
 
+import com.example.dictionary.Model.AWSPolly.AWSPollyModel;
 import com.example.dictionary.Model.RoomDB.Entity.Meaning;
 import com.example.dictionary.Model.RoomDB.Entity.Pron;
 import com.example.dictionary.Model.RoomDB.Entity.PronExtension;
