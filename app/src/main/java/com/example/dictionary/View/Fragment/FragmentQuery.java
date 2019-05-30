@@ -1,12 +1,6 @@
 package com.example.dictionary.View.Fragment;
 
-import android.Manifest;
-import android.accounts.AccountManager;
 import android.app.Activity;
-import android.app.Dialog;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,26 +17,15 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.dictionary.Model.RoomDB.Entity.SearchType;
 import com.example.dictionary.Model.RoomDB.Entity.Video;
 import com.example.dictionary.Model.RoomDB.Entity.Word;
 import com.example.dictionary.Presenter.MainPresenter;
 import com.example.dictionary.Presenter.MainPresenterImpl;
 import com.example.dictionary.R;
 import com.example.dictionary.View.RecycleAdapter.QueryListAdapter;
-import com.example.dictionary.View.RecycleAdapter.VideoQueryListAdapter;
-import com.google.android.gms.common.GoogleApiAvailability;
 
 import java.util.List;
-
-import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.EasyPermissions;
-
-import static android.app.Activity.RESULT_OK;
-import static com.example.dictionary.Model.YoutubeDataApi.YoutubeDataApiModel.PREF_ACCOUNT_NAME;
-import static com.example.dictionary.Model.YoutubeDataApi.YoutubeDataApiModel.REQUEST_ACCOUNT_PICKER;
-import static com.example.dictionary.Model.YoutubeDataApi.YoutubeDataApiModel.REQUEST_AUTHORIZATION;
-import static com.example.dictionary.Model.YoutubeDataApi.YoutubeDataApiModel.REQUEST_GOOGLE_PLAY_SERVICES;
-import static com.example.dictionary.Model.YoutubeDataApi.YoutubeDataApiModel.REQUEST_PERMISSION_GET_ACCOUNTS;
 
 public class FragmentQuery extends Fragment implements MainPresenter.View {
     // layout components
@@ -59,20 +42,21 @@ public class FragmentQuery extends Fragment implements MainPresenter.View {
 
     private String type;
     private int nav_id;
-    private boolean isLocal;
+    private SearchType searchType;
     private boolean isSearching;
     private int searchCount;
 
-    public FragmentQuery(Activity activity, boolean isLocal, int nav_id) {
+    public FragmentQuery(Activity activity, SearchType searchType, int nav_id) {
         presenter = new MainPresenterImpl(activity);
         presenter.setView(this);
-        this.isLocal = isLocal;
+        this.searchType = searchType;
         this.nav_id = nav_id;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
     }
 
     @Nullable
@@ -115,7 +99,7 @@ public class FragmentQuery extends Fragment implements MainPresenter.View {
             if (isSearching == true)
                 return;
             adapter.clearItems();
-            presenter.search(edit_query.getText().toString().trim(), isLocal);
+            presenter.search(edit_query.getText().toString().trim(), searchType);
             isSearching = true;
             searchCount = 0;
             progress_query.setVisibility(View.VISIBLE);
@@ -125,10 +109,10 @@ public class FragmentQuery extends Fragment implements MainPresenter.View {
     @Override
     public void onResume() {
         super.onResume();
-        if (isLocal == true) {
-            adapter.clearItems();
-            presenter.showNotes();
-        }
+//        if (searchType == true) {
+//            adapter.clearItems();
+//            presenter.showNotes();
+//        }
     }
 
     @Override
@@ -136,7 +120,8 @@ public class FragmentQuery extends Fragment implements MainPresenter.View {
         adapter.addItems(words);
         adapter.notifyDataSetChanged();
         searchCount++;
-        if ((isLocal == true && searchCount > 0) || (isLocal == false && searchCount > 1)) {
+        if (((searchType == SearchType.LocalOnly || searchType == SearchType.WebOnly) && searchCount > 0) ||
+            (searchType == SearchType.Both && searchCount > 1)) {
             progress_query.setVisibility(View.GONE);
             searchCount = 0;
             isSearching = false;

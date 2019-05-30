@@ -10,6 +10,7 @@ import android.net.NetworkInfo;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 
+import com.example.dictionary.Model.RoomDB.Entity.SearchType;
 import com.example.dictionary.Model.RoomDB.Entity.Video;
 import com.example.dictionary.Model.RoomDB.Entity.Word;
 import com.example.dictionary.Model.RoomDB.Model;
@@ -140,7 +141,7 @@ public class MainPresenterImpl implements MainPresenter {
     }
 
     @Override
-    public void search(final String query, boolean localOnly) {
+    public void search(final String query, SearchType searchType) {
         Runnable webrun = new Runnable() {
             @Override
             public void run() {
@@ -165,9 +166,10 @@ public class MainPresenterImpl implements MainPresenter {
                 }
             }
         };
-        if (!localOnly)
+        if (searchType == SearchType.WebOnly || searchType == SearchType.Both)
             new Thread(webrun).start();
-        new Thread(localrun).start();
+        if (searchType == SearchType.LocalOnly || searchType == SearchType.Both)
+            new Thread(localrun).start();
     }
 
     @Override
@@ -261,15 +263,18 @@ public class MainPresenterImpl implements MainPresenter {
                         view.addQueryResultList((List<Word>) listCallback);
                     }
                 });
-                boolean instantDownload = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext())
-                        .getBoolean("pref_search_download_word", false);
+                if (callbackType.split("-")[1].equals("Web")) {
+                    boolean instantDownload = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext())
+                            .getBoolean("pref_search_download_word", false);
 
-                if (instantDownload) {
-                    for (Word word : (List<Word>)listCallback) {
-                        addToNote(word);
+                    if (instantDownload) {
+                        for (Word word : (List<Word>)listCallback) {
+                            if (word.Word_String == null)
+                                continue;
+                            addToNote(word);
+                        }
                     }
                 }
-
             } else if (type.equals("SearchYoutube")) {
                 mainHandler.post(new Runnable() {
                     @Override

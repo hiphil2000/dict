@@ -69,9 +69,6 @@ public class FragmentYoutube extends Fragment implements YoutubePresenter.View {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        Intent intent2 = new Intent(getContext(), ExoPlayerActivity.class);
-//        intent2.putExtra("VID", "yRQUGatTTvU");
-//        startActivity(intent2);
         if (!((YoutubePresenterImpl)presenter).checkCredential()) {
             Toast.makeText(getContext(), "구글 인증이 필요합니다.", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(getContext(), YoutubeLoginActivity.class);

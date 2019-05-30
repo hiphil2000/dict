@@ -1,6 +1,7 @@
 package com.example.dictionary.Presenter;
 
 import com.example.dictionary.Model.RoomDB.Entity.Log;
+import com.example.dictionary.Model.RoomDB.Entity.SearchType;
 import com.example.dictionary.Model.RoomDB.Entity.Video;
 import com.example.dictionary.Model.RoomDB.Entity.Word;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
@@ -9,7 +10,7 @@ import java.util.List;
 
 public interface MainPresenter extends YoutubeCallbackable{
     void setView(MainPresenter.View view);
-    void search(String query, boolean localOnly);
+    void search(String query, SearchType searchType);
     void getViewLogs();
     void getWordViewLogs(String entryId);
     void addToNote(Word word);

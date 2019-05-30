@@ -85,7 +85,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guide_edit_wordinfo_top" />
 
-        <TextView
+        <EditText
             android:id="@+id/edit_pron_us"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -112,7 +112,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edit_text_pron_us" />
 
-        <TextView
+        <EditText
             android:id="@+id/edit_pron_uk"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

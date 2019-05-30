@@ -13,10 +13,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.dictionary.Model.RoomDB.Entity.SearchType;
 import com.example.dictionary.Model.RoomDB.Entity.Video;
 import com.example.dictionary.Model.RoomDB.Entity.Word;
 import com.example.dictionary.Presenter.MainPresenter;
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity
     private FragmentQuery fragLocal;
     private FragmentYoutube fragYoutube;
     private FragmentHistory fragHistory;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,15 +56,15 @@ public class MainActivity extends AppCompatActivity
 
     private void init_view() {
         fragManager = getSupportFragmentManager();
-        fragWeb = new FragmentQuery(this, false, R.id.nav_query);
-        fragLocal = new FragmentQuery(this, true, R.id.nav_note);
+        fragWeb = new FragmentQuery(this, SearchType.WebOnly, R.id.nav_query);
+        fragLocal = new FragmentQuery(this, SearchType.LocalOnly, R.id.nav_note);
         fragYoutube = new FragmentYoutube(this, false, R.id.nav_youtube);
         fragHistory = new FragmentHistory(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.button_add_word);
+        fab = (FloatingActionButton) findViewById(R.id.button_add_word);
         fab.setOnClickListener(button_add_custom_word);
 
         BottomNavigationView nav = findViewById(R.id.nav_bottom);
@@ -93,7 +96,11 @@ public class MainActivity extends AppCompatActivity
 
     private void switchFragment(int fragno) {
         Fragment fr;
-
+        if (fragno == 2) {
+            fab.show();
+        } else {
+            fab.hide();
+        }
         switch(fragno) {
             case 1:
                 fr = fragWeb;
