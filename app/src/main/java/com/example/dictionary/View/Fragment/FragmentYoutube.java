@@ -1,13 +1,12 @@
 package com.example.dictionary.View.Fragment;
 
-import android.Manifest;
 import android.accounts.AccountManager;
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,28 +22,26 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.dictionary.Model.RoomDB.Entity.SearchType;
 import com.example.dictionary.Model.RoomDB.Entity.Video;
 import com.example.dictionary.Model.RoomDB.Entity.Word;
 import com.example.dictionary.Presenter.MainPresenter;
 import com.example.dictionary.Presenter.MainPresenterImpl;
+import com.example.dictionary.Presenter.YoutubePresenter;
+import com.example.dictionary.Presenter.YoutubePresenterImpl;
 import com.example.dictionary.R;
-import com.example.dictionary.View.RecycleAdapter.QueryListAdapter;
+import com.example.dictionary.View.ExoPlayerActivity;
 import com.example.dictionary.View.RecycleAdapter.VideoQueryListAdapter;
-import com.google.android.gms.common.GoogleApiAvailability;
+import com.example.dictionary.View.YoutubeLoginActivity;
 
 import java.util.List;
 
-import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.EasyPermissions;
-
 import static android.app.Activity.RESULT_OK;
-import static com.example.dictionary.Model.YoutubeDataApi.YoutubeDataApiModel.PREF_ACCOUNT_NAME;
-import static com.example.dictionary.Model.YoutubeDataApi.YoutubeDataApiModel.REQUEST_ACCOUNT_PICKER;
-import static com.example.dictionary.Model.YoutubeDataApi.YoutubeDataApiModel.REQUEST_AUTHORIZATION;
-import static com.example.dictionary.Model.YoutubeDataApi.YoutubeDataApiModel.REQUEST_GOOGLE_PLAY_SERVICES;
-import static com.example.dictionary.Model.YoutubeDataApi.YoutubeDataApiModel.REQUEST_PERMISSION_GET_ACCOUNTS;
+import static com.example.dictionary.Model.YoutubeDataApi.Statics.NEED_GOOGLE_AUTH;
 
-public class FragmentQuery extends Fragment implements MainPresenter.View {
+public class FragmentYoutube extends Fragment implements YoutubePresenter.View {
+    public static String TAG = "FragmentYoutube";
+
     // layout components
     private EditText edit_query;
     private ImageButton button_query;
@@ -52,19 +49,18 @@ public class FragmentQuery extends Fragment implements MainPresenter.View {
 
     // recycler, adapter
     private RecyclerView list_query;
-    private QueryListAdapter adapter;
+    private VideoQueryListAdapter adapter;
 
     // presenter
-    private MainPresenter presenter;
+    private YoutubePresenter presenter;
 
-    private String type;
     private int nav_id;
     private boolean isLocal;
     private boolean isSearching;
     private int searchCount;
 
-    public FragmentQuery(Activity activity, boolean isLocal, int nav_id) {
-        presenter = new MainPresenterImpl(activity);
+    public FragmentYoutube(Activity activity, boolean isLocal, int nav_id) {
+        presenter = new YoutubePresenterImpl(activity);
         presenter.setView(this);
         this.isLocal = isLocal;
         this.nav_id = nav_id;
@@ -73,6 +69,14 @@ public class FragmentQuery extends Fragment implements MainPresenter.View {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        Intent intent2 = new Intent(getContext(), ExoPlayerActivity.class);
+//        intent2.putExtra("VID", "yRQUGatTTvU");
+//        startActivity(intent2);
+        if (!((YoutubePresenterImpl)presenter).checkCredential()) {
+            Toast.makeText(getContext(), "구글 인증이 필요합니다.", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getContext(), YoutubeLoginActivity.class);
+            getActivity().startActivityForResult(intent, NEED_GOOGLE_AUTH);
+        }
     }
 
     @Nullable
@@ -80,31 +84,17 @@ public class FragmentQuery extends Fragment implements MainPresenter.View {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_query, container, false);
         edit_query = view.findViewById(R.id.edit_query);
-        String hint = "";
-        switch(nav_id) {
-            case R.id.nav_query:
-                hint = getString(R.string.nav_query);
-                break;
-            case R.id.nav_note:
-                hint = getString(R.string.nav_note);
-                break;
-            case R.id.nav_history:
-                hint = getString(R.string.nav_history);
-                break;
-            case R.id.nav_youtube:
-                hint = getString(R.string.nav_youtube);
-                break;
-        }
-        edit_query.setHint(hint);
+        edit_query.setHint(R.string.nav_youtube);
         button_query = view.findViewById(R.id.button_query);
         button_query.setOnClickListener(button_query_onclick);
         progress_query = view.findViewById(R.id.progress_query);
-        adapter = new QueryListAdapter();
+        adapter = new VideoQueryListAdapter();
         adapter.setPresenter(presenter);
         list_query = view.findViewById(R.id.list_query);
         list_query.setLayoutManager(new LinearLayoutManager(getContext()));
         list_query.setItemAnimator(new DefaultItemAnimator());
         list_query.setAdapter(adapter);
+
 
         return view;
     }
@@ -112,11 +102,8 @@ public class FragmentQuery extends Fragment implements MainPresenter.View {
     private View.OnClickListener button_query_onclick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (isSearching == true)
-                return;
             adapter.clearItems();
-            presenter.search(edit_query.getText().toString().trim(), isLocal);
-            isSearching = true;
+            presenter.videoSearch(edit_query.getText().toString().trim(), SearchType.Both);
             searchCount = 0;
             progress_query.setVisibility(View.VISIBLE);
         }
@@ -127,13 +114,19 @@ public class FragmentQuery extends Fragment implements MainPresenter.View {
         super.onResume();
         if (isLocal == true) {
             adapter.clearItems();
-            presenter.showNotes();
+            presenter.showVideos();
         }
     }
 
     @Override
-    public void addQueryResultList(List<Word> words) {
-        adapter.addItems(words);
+    public void onStart() {
+        super.onStart();
+        presenter.setModelPresenter();
+    }
+
+    @Override
+    public void addVideoQueryResultList(List<Video> videos) {
+        adapter.addItems(videos);
         adapter.notifyDataSetChanged();
         searchCount++;
         if ((isLocal == true && searchCount > 0) || (isLocal == false && searchCount > 1)) {
@@ -141,34 +134,46 @@ public class FragmentQuery extends Fragment implements MainPresenter.View {
             searchCount = 0;
             isSearching = false;
         }
+
     }
 
     @Override
-    public void addVideoQueryResultList(List<Video> videos) {
-    }
-
-    @Override
-    public void addViewLogResultList(List<Word> words) {
-        // not using here
-    }
-
-    @Override
-    public void setQueryResultList(List<Word> words) {
+    public void setVideo(Video video) {
 
     }
 
     @Override
     public void pushResultMessage(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-        if (isSearching) {
-            isSearching = false;
-            progress_query.setVisibility(View.GONE);
-        }
+        final String msg = message;
+        Handler handle = new Handler(getActivity().getMainLooper());
+        handle.post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                if (isSearching) {
+                    isSearching = false;
+                    progress_query.setVisibility(View.GONE);
+                }
+            }
+        });
+
     }
 
     @Override
-    public void showDialog(String type, Object... params) {
+    public void onActivityResult(
+            int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case NEED_GOOGLE_AUTH:
+                if (resultCode != RESULT_OK) {
+                    pushResultMessage("구글 인증을 취소했습니다.");
+                } else {
+                    pushResultMessage("인증됐습니다.");
+                    presenter.setModelPresenter();
+                }
+                break;
+        }
     }
 
-
+    //endregion
 }

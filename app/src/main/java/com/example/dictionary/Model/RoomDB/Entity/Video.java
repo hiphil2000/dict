@@ -8,6 +8,8 @@ import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
 import com.example.dictionary.Model.RoomDB.TypeConverters.DateConverter;
+import com.example.dictionary.Model.RoomDB.TypeConverters.TimeConverter;
+import com.example.dictionary.Model.RoomDB.TypeConverters.VideoTypeConverter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -26,6 +28,9 @@ public class Video implements Serializable {
 
     public String Video_Thumbnail_Data;
 
+    @TypeConverters({VideoTypeConverter.class})
+    public VideoType Video_Thumbnail_Data_Type;
+
     @TypeConverters({DateConverter.class})
     public Date Video_Published_Date;
 
@@ -33,17 +38,20 @@ public class Video implements Serializable {
 
     public String Video_Name;
 
-    public int Video_RunningTime;
+    @TypeConverters({TimeConverter.class})
+    public Date Video_RunningTime;
 
     public String Video_Data;
 
+    @TypeConverters({VideoTypeConverter.class})
+    public VideoType Video_Data_Type;
+
     @Ignore
-    public List<Subtitle> Subtitles;
+    public List<Caption> Captions;
 
     @Ignore
     public boolean IsLocal;
 
-    public Video() {
-        Subtitles = new ArrayList<>();
+    public Video() {Captions = new ArrayList<>();
     }
 }

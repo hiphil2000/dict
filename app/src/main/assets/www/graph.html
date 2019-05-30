@@ -14,8 +14,10 @@
         <div class="ct-chart ct-perfect-fourth"></div>
         <script>
             function fn_makeGraph(type, labs, ...sers) {
+                    console.log(labs);
                     var series = []
                     for(var i = 0; i < sers.length; i++) {
+                        console.log(sers[i]);
                         series.push(stringToArray(sers[i], true));
                     }
                     var data = {
@@ -41,6 +43,7 @@
                             arr[i] *= 1;
                         }
                     }
+                    console.log(arr);
                     return arr;
                 }
         </script>

@@ -3,6 +3,9 @@
     package="com.example.dictionary">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
     <application
         android:allowBackup="true"
@@ -12,7 +15,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".View.YoutubeActivity"></activity>
+
+        <activity
+            android:name=".View.SettingsActivity"
+            android:label="@string/title_activity_settings" />
+        <activity android:name=".View.ExoPlayerActivity" />
+        <activity android:name=".View.YoutubeLoginActivity" />
+        <activity android:name=".View.YoutubeActivity" />
         <activity android:name=".View.ViewLogDetailActivity" />
         <activity android:name=".View.WordEditActivity" />
         <activity android:name=".View.WordDetailActivity" />

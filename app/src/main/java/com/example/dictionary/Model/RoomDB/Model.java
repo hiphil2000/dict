@@ -89,12 +89,20 @@ public class Model {
         return videoDAO.getFullVideo(Video_ID);
     }
 
+    public List<Video> SearchVideo(String Query) {
+        return videoDAO.searchVideo(Query);
+    }
+
     public List<Video> GetVideos() {
         return videoDAO.getVideos();
     }
 
     public List<Video> GetVideos(String query) {
         return videoDAO.getVideos(query);
+    }
+
+    public void AddVideo(Video video) {
+        videoDAO.addVideo(video);
     }
 
 }

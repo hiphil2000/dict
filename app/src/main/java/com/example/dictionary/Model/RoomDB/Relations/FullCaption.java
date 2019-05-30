@@ -5,14 +5,13 @@ import androidx.room.Relation;
 
 import com.example.dictionary.Model.RoomDB.Entity.Caption;
 import com.example.dictionary.Model.RoomDB.Entity.Snippet;
-import com.example.dictionary.Model.RoomDB.Entity.Video;
 
 import java.util.List;
 
-public class FullVideo {
+public class FullCaption {
     @Embedded
-    public Video Video;
+    public Caption Caption;
 
-    @Relation(parentColumn = "Video_ID", entityColumn = "Video_ID", entity = Caption.class)
-    public List<FullCaption> Captions;
+    @Relation(parentColumn = "Caption_ID", entityColumn = "Caption_ID", entity = Snippet.class)
+    public List<Snippet> Snippets;
 }

@@ -3,8 +3,13 @@ package com.example.dictionary.Model.RoomDB.Entity;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import static androidx.room.ForeignKey.CASCADE;
 
@@ -18,23 +23,28 @@ import static androidx.room.ForeignKey.CASCADE;
                 )
         },
         indices = {
-                @Index(value = "Subtitle_ID", unique = true),
+                @Index(value = "Caption_ID", unique = true),
                 @Index(value = "Video_ID"),
         }
+
 )
-public class Subtitle {
-    @PrimaryKey(autoGenerate = true)
+public class Caption implements Serializable {
+    @PrimaryKey
     @NonNull
-    public long Subtitle_ID;
+    public String Caption_ID;
 
     @NonNull
     public String Video_ID;
 
-    public int Subtitle_StartTime;
+    public String Caption_Name;
 
-    public int Subtitle_EndTime;
+    public String Caption_Language;
 
-    public String Subtitle_String;
+    @Ignore
+    public List<Snippet> Snippets;
 
-    public Subtitle() {}
+    public Caption () {
+        Snippets = new ArrayList<>();
+    }
+
 }

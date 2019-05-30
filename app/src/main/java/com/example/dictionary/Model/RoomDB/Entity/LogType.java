@@ -6,7 +6,8 @@ public enum LogType {
     WordWebDetail(4),
     WordCreate(8),
     WordMemorized(16),
-    All(31),
+    WordUnMemorized(32),
+    All(63),
     Unknown(0);
 
 

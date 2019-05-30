@@ -38,4 +38,40 @@
     <string name="api_key">AIzaSyBad6YiSUdWYF335_ZPDHF5wVYA6xw4tDY</string>
     <string name="client_id"></string>
     <string name="client_secret"></string>
+    <string name="option">설정</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="pref_search_download_word">단어 즉시 다운로드</string>
+    <string name="pref_search_download_word_summary">단어를 검색과 동시에 내부 저장소에 저장할 지 설정합니다.</string>
+    <string name="pref_search_download_youtube">영상 즉시 다운로드</string>
+    <string name="pref_search_download_youtube_summary">유튜브에서 영상을 탐색할 때 내부 저장소에 저장할 지 설정합니다.</string>
+    <string name="pref_search">검색</string>
+    <string name="pref_word">단어장</string>
+    <string name="pref_word_tts_us">미국 음성</string>
+    <string name="pref_word_tts_us_summary">미국 음성 정보를 어떻게 저장할 지 설정합니다.</string>
+    <string name="pref_word_tts_uk">영국 음성</string>
+    <string name="pref_word_tts_uk_summary">영국 음성 정보를 어떻게 저장할 지 설정합니다.</string>
+    <string name="pref_data_nuke_table">내부 저장소 비우기</string>
+    <string name="pref_data_nuke_table_summary">내부 저장소에서 모든 정보를 지웁니다.\n[주의] 되돌릴 수 없는 작업입니다.</string>
+    <string name="pref_youtube">유튜브</string>
+    <string name="pref_youtube_extension">유튜브 영상 저장</string>
+    <string name="pref_youtube_extension_summary">유튜브 영상 정보를 어떻게 저장할 지 설정합니다.</string>
+    <string name="pref_youtube_max_result">검색 결과 수</string>
+    <string name="pref_youtube_max_result_summary">유튜브에서 영상을 검색할 때 한번에 몇 개까지의 결과를 가져올지 설정합니다.</string>
+    <string name="pref_data">저장소</string>
+    <string name="pref_data_current_usage">사용중인 저장소 공간</string>
 </resources>

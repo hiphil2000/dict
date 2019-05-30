@@ -6,6 +6,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,12 +17,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amazonaws.util.Base64;
+import com.example.dictionary.Model.RoomDB.Entity.Log;
 import com.example.dictionary.Model.RoomDB.Entity.LogType;
 import com.example.dictionary.Model.RoomDB.Entity.Pron;
 import com.example.dictionary.Model.RoomDB.Entity.PronExtension;
 import com.example.dictionary.Model.RoomDB.Entity.PronType;
 import com.example.dictionary.Model.RoomDB.Entity.Meaning;
 import com.example.dictionary.Model.RoomDB.Entity.Word;
+import com.example.dictionary.Model.RoomDB.TypeConverters.DateConverter;
 import com.example.dictionary.Presenter.WordDetailPresenter;
 import com.example.dictionary.Presenter.WordDetailPresenterImpl;
 import com.example.dictionary.R;
@@ -42,6 +45,8 @@ public class WordDetailActivity extends AppCompatActivity implements WordDetailP
     private ImageButton button_pron_uk;
     private ImageButton button_pron_us;
     private RecyclerView list_meaning;
+    private Switch memorized;
+    private TextView memorized_at;
     private MeaningRecyclerAdapter meaningRecyclerAdapter;
 
     private MediaPlayer mediaPlayer;
@@ -55,10 +60,13 @@ public class WordDetailActivity extends AppCompatActivity implements WordDetailP
         init_view();
         init_data();
         wordDetailPresenter = new WordDetailPresenterImpl(WordDetailActivity.this);
-        if (word.IsLocal == true)
+        if (word.IsLocal == true) {
             wordDetailPresenter.writeLog(word.Word_String, LogType.WordLocalDetail);
-        else
+        }
+        else {
             wordDetailPresenter.writeLog(word.Word_String, LogType.WordWebDetail);
+            memorized.setEnabled(false);
+        }
     }
 
     private void init_view() {
@@ -78,6 +86,22 @@ public class WordDetailActivity extends AppCompatActivity implements WordDetailP
             @Override
             public void onClick(View v) {
                 media_play(typicalMeaning.PronUK, PronType.US);
+            }
+        });
+        memorized = findViewById(R.id.memorized);
+        memorized_at = findViewById(R.id.memorized_at);
+        memorized.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (memorized.isChecked()) {
+                    wordDetailPresenter.writeLog(word.Word_String, LogType.WordMemorized);
+                    memorized_at.setText("암기 완료!");
+                }
+                else {
+                    wordDetailPresenter.writeLog(word.Word_String, LogType.WordUnMemorized);
+                    memorized_at.setText("암기 취소");
+
+                }
             }
         });
     }
@@ -126,6 +150,20 @@ public class WordDetailActivity extends AppCompatActivity implements WordDetailP
 
         meaningRecyclerAdapter.addItems(word.Meanings);
         meaningRecyclerAdapter.notifyDataSetChanged();
+
+        if (word.Logs != null) {
+            word.Logs.sort(new util.LogDescender());
+            for(Log log : word.Logs) {
+                if (log.LogType == LogType.WordUnMemorized) {
+                    break;
+                }
+                if (log.LogType == LogType.WordMemorized) {
+                    memorized.setChecked(true);
+                    memorized_at.setText(DateConverter.dateToString(log.Log_Date) + "에 암기함.");
+                    break;
+                }
+            }
+        }
     }
 
     @Override

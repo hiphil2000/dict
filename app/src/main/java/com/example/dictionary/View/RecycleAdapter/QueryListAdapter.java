@@ -16,6 +16,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.dictionary.Model.RoomDB.Entity.Log;
+import com.example.dictionary.Model.RoomDB.Entity.LogType;
 import com.example.dictionary.Model.RoomDB.Entity.Meaning;
 import com.example.dictionary.Model.RoomDB.Entity.Word;
 import com.example.dictionary.Presenter.MainPresenter;
@@ -86,6 +88,23 @@ public class QueryListAdapter extends RecyclerView.Adapter<QueryListAdapter.Quer
                 holder.text_query_type.setText(util.wordTypeToString(typicalMeaning.Meaning_Type));
                 holder.text_query_mean_kr.setText(typicalMeaning.Meaning_Kor);
                 holder.text_query_mean_en.setText(typicalMeaning.Meaning_Eng);
+            }
+
+            if (nowWord.IsLocal == false)
+                holder.text_memorized.setVisibility(View.GONE);
+            holder.text_memorized.setText("미암기");
+            if(nowWord.Logs != null) {
+                if (nowWord.Logs.size() > 0) {
+                    for (Log log : nowWord.Logs) {
+                        if (log.LogType == LogType.WordUnMemorized) {
+                            break;
+                        }
+                        if (log.LogType == LogType.WordMemorized) {
+                            holder.text_memorized.setText("암기");
+                            break;
+                        }
+                    }
+                }
             }
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -164,6 +183,7 @@ public class QueryListAdapter extends RecyclerView.Adapter<QueryListAdapter.Quer
         protected TextView text_query_from;
         protected TextView text_query_mean_kr;
         protected TextView text_query_mean_en;
+        protected TextView text_memorized;
         protected ImageButton button_query_item_menu;
 
         public QueryListHolder(@NonNull View itemView) {
@@ -174,6 +194,7 @@ public class QueryListAdapter extends RecyclerView.Adapter<QueryListAdapter.Quer
             this.text_query_from = itemView.findViewById(R.id.text_query_from);
             this.text_query_mean_kr = itemView.findViewById(R.id.text_query_mean_kr);
             this.text_query_mean_en = itemView.findViewById(R.id.text_query_mean_en);
+            this.text_memorized = itemView.findViewById(R.id.text_memorized);
             this.button_query_item_menu = itemView.findViewById(R.id.button_query_item_menu);
         }
     }

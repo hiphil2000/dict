@@ -11,7 +11,7 @@ import static androidx.room.ForeignKey.CASCADE;
 @Entity(
         foreignKeys = {
                 @ForeignKey(
-                        entity = Subtitle.class,
+                        entity = Snippet.class,
                         parentColumns = "Subtitle_ID",
                         childColumns = "Subtitle_ID",
                         onDelete = CASCADE

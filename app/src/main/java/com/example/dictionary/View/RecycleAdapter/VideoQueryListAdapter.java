@@ -4,7 +4,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,16 +25,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.dictionary.Model.RoomDB.Entity.Video;
 import com.example.dictionary.Presenter.MainPresenter;
 import com.example.dictionary.Presenter.MainPresenterImpl;
+import com.example.dictionary.Presenter.YoutubePresenter;
 import com.example.dictionary.R;
+import com.example.dictionary.View.ExoPlayerActivity;
+import com.example.dictionary.View.Fragment.FragmentYoutube;
 import com.example.dictionary.View.WordEditActivity;
+import com.example.dictionary.View.YoutubeActivity;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class VideoQueryListAdapter extends RecyclerView.Adapter<VideoQueryListAdapter.VideoQueryListHolder>  {
     private List<Video> data;
-    private MainPresenter presenter;
+    private YoutubePresenter presenter;
     private Context context;
     private int delPos;
 
@@ -39,17 +48,21 @@ public class VideoQueryListAdapter extends RecyclerView.Adapter<VideoQueryListAd
         delPos = -1;
     }
 
-    public void setPresenter(MainPresenter presenter) {this.presenter = presenter;}
+    public void setPresenter(YoutubePresenter presenter) {this.presenter = presenter;}
 
     public List<Video> getData() {return data;}
 
     public void addItems(Collection<Video> videos) {
         for (Video video : videos) {
-            if (video != null)
-                if (video.Subtitles != null)
-                    if (video.Subtitles.size() > 0)
-                        this.data.add(video);
+            if (video != null) {
+                if (video.Video_Data != null)
+                    this.data.add(video);
+            }
         }
+    }
+    public void addItem(Video video) {
+        if (video != null)
+            this.data.add(video);
     }
 
     public void clearItems() {
@@ -73,11 +86,23 @@ public class VideoQueryListAdapter extends RecyclerView.Adapter<VideoQueryListAd
         if (nowVideo == null)
             return;
 
-        holder.video_thumbnail.setImageURI(Uri.parse(nowVideo.Video_Thumbnail_Data));
+        new DownloadImageTask(holder.video_thumbnail).execute(nowVideo.Video_Thumbnail_Data);
         holder.video_title.setText(nowVideo.Video_Name);
         holder.video_channel_title.setText(nowVideo.Video_Channel_Name);
         holder.video_publish_date.setText(nowVideo.Video_Published_Date.toString());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Intent intent = new Intent(context, YoutubeActivity.class);
+//                intent.putExtra("video", nowVideo);
+//                context.startActivity(intent);
+                Intent intent = new Intent(context, ExoPlayerActivity.class);
+                intent.putExtra("video", nowVideo);
+                context.startActivity(intent);
+            }
+        });
         holder.video_menu.setOnClickListener(new View.OnClickListener() {
+            //region onclick
             @Override
             public void onClick(View v) {
                 PopupMenu pop = new PopupMenu(((MainPresenterImpl) presenter).getActivity(), v);
@@ -115,6 +140,7 @@ public class VideoQueryListAdapter extends RecyclerView.Adapter<VideoQueryListAd
                 });
                 pop.show();
             }
+            //endregion
         });
     }
 
@@ -141,7 +167,6 @@ public class VideoQueryListAdapter extends RecyclerView.Adapter<VideoQueryListAd
         TextView video_title;
         TextView video_channel_title;
         TextView video_publish_date;
-        TextView video_description;
         ImageButton video_menu;
 
         public VideoQueryListHolder(@NonNull View itemView) {
@@ -151,8 +176,32 @@ public class VideoQueryListAdapter extends RecyclerView.Adapter<VideoQueryListAd
             this.video_title = this.itemView.findViewById(R.id.video_title);
             this.video_channel_title = this.itemView.findViewById(R.id.video_channel_title);
             this.video_publish_date = this.itemView.findViewById(R.id.video_publish_date);
-            this.video_description = this.itemView.findViewById(R.id.video_description);
             this.video_menu = this.itemView.findViewById(R.id.video_menu);
+        }
+    }
+
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
         }
     }
 }

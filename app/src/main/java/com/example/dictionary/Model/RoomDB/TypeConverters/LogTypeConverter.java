@@ -17,6 +17,8 @@ public class LogTypeConverter {
             return LogType.WordCreate;
         } else if (logCode == LogType.WordMemorized.getLogCode()) {
             return LogType.WordMemorized;
+        }  else if (logCode == LogType.WordUnMemorized.getLogCode()) {
+            return LogType.WordUnMemorized;
         } else {
             return LogType.Unknown;
         }

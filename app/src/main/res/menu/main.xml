@@ -4,5 +4,10 @@
 	<item android:id="@+id/nuke_table"
 		android:title="@string/nuke_table"
 		android:orderInCategory="100"
+		android:visible="false"
+		app:showAsAction="never"/>
+	<item android:id="@+id/option"
+		android:title="@string/option"
+		android:orderInCategory="100"
 		app:showAsAction="never"/>
 </menu>

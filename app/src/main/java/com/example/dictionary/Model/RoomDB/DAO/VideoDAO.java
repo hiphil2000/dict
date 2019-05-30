@@ -1,10 +1,15 @@
 package com.example.dictionary.Model.RoomDB.DAO;
 
 import androidx.room.Dao;
+import androidx.room.Ignore;
+import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.example.dictionary.Model.RoomDB.Entity.Subtitle;
+import com.example.dictionary.Model.RoomDB.Entity.Caption;
+import com.example.dictionary.Model.RoomDB.Entity.Snippet;
 import com.example.dictionary.Model.RoomDB.Entity.Video;
+import com.example.dictionary.Model.RoomDB.Relations.FullCaption;
 import com.example.dictionary.Model.RoomDB.Relations.FullVideo;
 
 import java.util.List;
@@ -16,13 +21,28 @@ public abstract class VideoDAO {
         if (fullVideo == null)
             return null;
 
-        for(Subtitle sub : fullVideo.Subtitles) {
-            sub.Video_ID = Video_ID;
+        for(FullCaption fcapt : fullVideo.Captions) {
+            fcapt.Caption.Video_ID = Video_ID;
+            fcapt.Caption.Snippets = fcapt.Snippets;
+            for (Snippet snip : fcapt.Snippets) {
+                snip.Caption_ID = fcapt.Caption.Caption_ID;
+            }
+            fullVideo.Video.Captions.add(fcapt.Caption);
         }
 
-        fullVideo.Video.Subtitles = fullVideo.Subtitles;
-
         return fullVideo.Video;
+    }
+
+    public void addVideo(Video video) {
+        _addVideo(video);
+        for(Caption caption : video.Captions) {
+            caption.Video_ID = video.Video_ID;
+            _addCaption(caption);
+            for(Snippet snippet : caption.Snippets) {
+                snippet.Caption_ID = caption.Caption_ID;
+                _addSnippet(snippet);
+            }
+        }
     }
 
     @Query("SELECT * FROM Video")
@@ -37,4 +57,15 @@ public abstract class VideoDAO {
     @Query("SELECT * FROM Video WHERE Video_ID = :Video_ID")
     public abstract FullVideo _getFullVideo(String Video_ID);
 
+    @Query("SELECT * FROM Video WHERE Video_Name LIKE :query")
+    public abstract List<Video> searchVideo(String query);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    public abstract void _addVideo(Video video);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    public abstract void _addCaption(Caption caption);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    public abstract void _addSnippet(Snippet snippet);
 }

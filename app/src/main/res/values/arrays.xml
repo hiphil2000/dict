@@ -1,0 +1,22 @@
+<resources>
+    <!-- tts Preference -->
+    <string-array name="tts_entries">
+        <item>원본 링크</item>
+        <item>Base64 인코딩 데이터</item>
+    </string-array>
+
+    <string-array name="tts_values">
+        <item>2</item>
+        <item>1</item>
+    </string-array>
+    <!-- youtube Preference -->
+    <string-array name="youtube_entries">
+        <item>원본 링크</item>
+        <item>MP4 데이터</item>
+    </string-array>
+
+    <string-array name="youtube_values">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+</resources>

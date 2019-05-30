@@ -152,7 +152,14 @@ public class util {
     public static class LogDescender implements Comparator<Log> {
         @Override
         public int compare(Log o1, Log o2) {
-            return o2.Log_Date.compareTo(o1.Log_Date);
+            if (o2 == null && o1 != null)
+                return 1;
+            else if (o1 == null && o2 != null)
+                return -1;
+            else if (o2 == null && o1 == null)
+                return 0;
+            else
+                return o2.Log_Date.compareTo(o1.Log_Date);
         }
     }
 }

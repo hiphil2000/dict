@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        app:title="@string/pref_search">
+
+        <SwitchPreference
+            app:key="pref_search_download_word"
+            app:title="@string/pref_search_download_word"
+            app:summary="@string/pref_search_download_word_summary"/>
+
+        <SwitchPreference
+            app:key="pref_search_download_youtube"
+            app:title="@string/pref_search_download_youtube"
+            app:summary="@string/pref_search_download_youtube_summary"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:title="@string/pref_word">
+        <ListPreference
+            app:key="pref_word_tts_us"
+            app:title="@string/pref_word_tts_us"
+            app:summary="@string/pref_word_tts_us_summary"
+            android:entries="@array/tts_entries"
+            android:entryValues="@array/tts_values"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            app:icon="@drawable/ic_action_volume_up"/>
+
+        <ListPreference
+            app:key="pref_word_tts_uk"
+            app:title="@string/pref_word_tts_uk"
+            app:summary="@string/pref_word_tts_uk_summary"
+            android:entries="@array/tts_entries"
+            android:entryValues="@array/tts_values"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            app:icon="@drawable/ic_action_volume_up"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/pref_youtube">
+
+        <ListPreference
+            android:key="pref_youtube_extension"
+            android:title="@string/pref_youtube_extension"
+            android:entries="@array/youtube_entries"
+            android:entryValues="@array/youtube_values"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:summary="@string/pref_youtube_extension_summary"/>
+
+        <EditTextPreference
+            android:key="pref_youtube_max_result"
+            android:title="@string/pref_youtube_max_result"
+            android:summary="@string/pref_youtube_max_result_summary"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/pref_data">
+
+        <Preference
+            app:key="pref_data_current_usage"
+            app:title="@string/pref_data_current_usage"
+            app:singleLineTitle="true"/>
+
+        <Preference
+            app:key="pref_data_nuke_table"
+            app:title="@string/pref_data_nuke_table"
+            app:summary="@string/pref_data_nuke_table_summary"
+            app:singleLineTitle="true"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
