@@ -293,7 +293,6 @@ public class YoutubeDataApiModel {
                 VideoSnippet snippet = result.getSnippet();
                 video.Video_ID = vid;
                 video.Video_Name = snippet.getTitle();
-                video.Video_Channel_Name = snippet.getChannelTitle();
                 video.Video_Thumbnail_Data = snippet.getThumbnails().getMedium().getUrl();
                 video.Video_Thumbnail_Data_Type = VideoType.HyperLink;
                 video.Video_Data = "https://www.youtube.com/watch?v=" + vid;
@@ -346,7 +345,6 @@ public class YoutubeDataApiModel {
                 snippet = result.getSnippet();
                 vid.Video_ID = result.getId().getVideoId();
                 vid.Video_Name = snippet.getTitle();
-                vid.Video_Channel_Name = snippet.getChannelTitle();
                 vid.Video_Published_Date = new Date(snippet.getPublishedAt().getValue() * 1000L);
                 vid.Video_Thumbnail_Data = snippet.getThumbnails().getMedium().getUrl();
                 vid.Video_Thumbnail_Data_Type = VideoType.HyperLink;
@@ -379,7 +377,6 @@ public class YoutubeDataApiModel {
             VideoSnippet snippet = result.getSnippet();
             video.Video_ID = vid;
             video.Video_Name = snippet.getTitle();
-            video.Video_Channel_Name = snippet.getChannelTitle();
             video.Video_Thumbnail_Data = snippet.getThumbnails().getMedium().getUrl();
             video.Video_Thumbnail_Data_Type = VideoType.HyperLink;
             video.Video_Data = "https://www.youtube.com/watch?v=" + vid;

@@ -72,22 +72,24 @@ public class FragmentHistory extends Fragment implements MainPresenter.View {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_history, container, false);
-        this.web_graph = view.findViewById(R.id.web_graph);
-        web_graph.getSettings().setDomStorageEnabled(true);
-        web_graph.getSettings().setJavaScriptEnabled(true);
-        web_graph.loadUrl("file:///android_asset/www/graph.html");
+        View view = null;
+        try {
+            view = inflater.inflate(R.layout.fragment_history, container, false);
+            this.web_graph = view.findViewById(R.id.web_graph);
+            web_graph.getSettings().setDomStorageEnabled(true);
+            web_graph.getSettings().setJavaScriptEnabled(true);
+            web_graph.loadUrl("file:///android_asset/www/graph.html");
 
-        this.edit_query = view.findViewById(R.id.edit_query);
-        edit_query.setVisibility(View.GONE);
-        this.button_query = view.findViewById(R.id.button_query);
-        button_query.setVisibility(View.GONE);
-        this.button_query.setOnClickListener(button_query_onclick);
-        this.history_option = view.findViewById(R.id.history_option);
-        history_option.setVisibility(View.GONE);
-        this.s_table_view = view.findViewById(R.id.s_table_view);
-        this.s_table_view.setDataAdapter(adapter);
-
+            this.edit_query = view.findViewById(R.id.edit_query);
+            edit_query.setVisibility(View.GONE);
+            this.button_query = view.findViewById(R.id.button_query);
+            button_query.setVisibility(View.GONE);
+            this.button_query.setOnClickListener(button_query_onclick);
+            this.history_option = view.findViewById(R.id.history_option);
+            history_option.setVisibility(View.GONE);
+            this.s_table_view = view.findViewById(R.id.s_table_view);
+            this.s_table_view.setDataAdapter(adapter);
+        } catch(Exception e) {}
         return view;
     }
 

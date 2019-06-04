@@ -1,10 +1,7 @@
 package com.example.dictionary.View.Fragment;
 
-import android.accounts.AccountManager;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -24,20 +21,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dictionary.Model.RoomDB.Entity.SearchType;
 import com.example.dictionary.Model.RoomDB.Entity.Video;
-import com.example.dictionary.Model.RoomDB.Entity.Word;
-import com.example.dictionary.Presenter.MainPresenter;
-import com.example.dictionary.Presenter.MainPresenterImpl;
 import com.example.dictionary.Presenter.YoutubePresenter;
 import com.example.dictionary.Presenter.YoutubePresenterImpl;
 import com.example.dictionary.R;
-import com.example.dictionary.View.ExoPlayerActivity;
 import com.example.dictionary.View.RecycleAdapter.VideoQueryListAdapter;
-import com.example.dictionary.View.YoutubeLoginActivity;
 
 import java.util.List;
-
-import static android.app.Activity.RESULT_OK;
-import static com.example.dictionary.Model.YoutubeDataApi.Statics.NEED_GOOGLE_AUTH;
 
 public class FragmentYoutube extends Fragment implements YoutubePresenter.View {
     public static String TAG = "FragmentYoutube";
@@ -69,11 +58,6 @@ public class FragmentYoutube extends Fragment implements YoutubePresenter.View {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!((YoutubePresenterImpl)presenter).checkCredential()) {
-            Toast.makeText(getContext(), "구글 인증이 필요합니다.", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(getContext(), YoutubeLoginActivity.class);
-            getActivity().startActivityForResult(intent, NEED_GOOGLE_AUTH);
-        }
     }
 
     @Nullable
@@ -92,7 +76,6 @@ public class FragmentYoutube extends Fragment implements YoutubePresenter.View {
         list_query.setItemAnimator(new DefaultItemAnimator());
         list_query.setAdapter(adapter);
 
-
         return view;
     }
 
@@ -100,7 +83,7 @@ public class FragmentYoutube extends Fragment implements YoutubePresenter.View {
         @Override
         public void onClick(View v) {
             adapter.clearItems();
-            presenter.videoSearch(edit_query.getText().toString().trim(), SearchType.Both);
+            presenter.searchData(edit_query.getText().toString().trim());
             searchCount = 0;
             progress_query.setVisibility(View.VISIBLE);
         }
@@ -109,16 +92,7 @@ public class FragmentYoutube extends Fragment implements YoutubePresenter.View {
     @Override
     public void onResume() {
         super.onResume();
-        if (isLocal == true) {
-            adapter.clearItems();
-            presenter.showVideos();
-        }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        presenter.setModelPresenter();
+        presenter.refreshData();
     }
 
     @Override
@@ -126,7 +100,7 @@ public class FragmentYoutube extends Fragment implements YoutubePresenter.View {
         adapter.addItems(videos);
         adapter.notifyDataSetChanged();
         searchCount++;
-        if ((isLocal == true && searchCount > 0) || (isLocal == false && searchCount > 1)) {
+        if (searchCount > 0) {
             progress_query.setVisibility(View.GONE);
             searchCount = 0;
             isSearching = false;
@@ -141,35 +115,28 @@ public class FragmentYoutube extends Fragment implements YoutubePresenter.View {
 
     @Override
     public void pushResultMessage(String message) {
-        final String msg = message;
-        Handler handle = new Handler(getActivity().getMainLooper());
-        handle.post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
-                if (isSearching) {
-                    isSearching = false;
-                    progress_query.setVisibility(View.GONE);
+        try {
+            final String msg = message;
+            Handler handle = new Handler(getActivity().getMainLooper());
+            handle.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                    if (isSearching) {
+                        isSearching = false;
+                        progress_query.setVisibility(View.GONE);
+                    }
                 }
-            }
-        });
-
+            });
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onActivityResult(
             int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch(requestCode) {
-            case NEED_GOOGLE_AUTH:
-                if (resultCode != RESULT_OK) {
-                    pushResultMessage("구글 인증을 취소했습니다.");
-                } else {
-                    pushResultMessage("인증됐습니다.");
-                    presenter.setModelPresenter();
-                }
-                break;
-        }
     }
 
     //endregion

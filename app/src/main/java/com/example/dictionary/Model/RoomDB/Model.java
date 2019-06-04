@@ -5,7 +5,6 @@ import android.content.Context;
 import androidx.room.Room;
 
 import com.example.dictionary.Model.RoomDB.DAO.LogDAO;
-import com.example.dictionary.Model.RoomDB.DAO.VideoDAO;
 import com.example.dictionary.Model.RoomDB.DAO.WordDAO;
 import com.example.dictionary.Model.RoomDB.Entity.Log;
 import com.example.dictionary.Model.RoomDB.Entity.Video;
@@ -17,7 +16,6 @@ public class Model {
     private AppDatabase db;
     private WordDAO wordDAO;
     private LogDAO logDAO;
-    private VideoDAO videoDAO;
 
     public Model(Context context) {
         db = Room.databaseBuilder(context, AppDatabase.class, "EnglishDictDB.db")
@@ -25,7 +23,7 @@ public class Model {
                 .build();
         wordDAO = db.getWordNoteDAO();
         logDAO = db.getLogDAO();
-        videoDAO = db.getVideoDAO();
+
     }
 
     public String AddWord(Word word) {
@@ -83,26 +81,6 @@ public class Model {
     public List<Word> GetWordLogs(String Word_String) {
         //return logDAO.getLogs(logType, wordName);
         return wordDAO.getFullWords();
-    }
-
-    public Video GetVideo(String Video_ID) {
-        return videoDAO.getFullVideo(Video_ID);
-    }
-
-    public List<Video> SearchVideo(String Query) {
-        return videoDAO.searchVideo(Query);
-    }
-
-    public List<Video> GetVideos() {
-        return videoDAO.getVideos();
-    }
-
-    public List<Video> GetVideos(String query) {
-        return videoDAO.getVideos(query);
-    }
-
-    public void AddVideo(Video video) {
-        videoDAO.addVideo(video);
     }
 
 }

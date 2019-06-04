@@ -5,18 +5,25 @@ import com.example.dictionary.Model.RoomDB.Entity.Video;
 
 import java.util.List;
 
-public interface YoutubePresenter extends YoutubeCallbackable {
+public interface YoutubePresenter {
     void setView(YoutubePresenter.View view);
-    void getFullVideo(Video video);
-    void addVideo(Video video);
-    void deleteVideo(Video video);
-    void videoSearch(String query, SearchType searchType);
-    void showVideos();
+    void refreshData();
+    void moreData();
+    void searchData(String query);
+    void getDetail(String Video_ID);
     void callback(final List<?> listCallback, String callbackType);
-    void setModelPresenter();
-    void downloadVideo(String url);
+    void callback(final Object objCallback, String callbackType);
 
-    void removeModelPresenter();
+//
+//    void getFullVideo(Video video);
+//    void addVideo(Video video);
+//    void deleteVideo(Video video);
+//    void videoSearch(String query, SearchType searchType);
+//    void showVideos();
+//    void setModelPresenter();
+//    void downloadVideo(String url);
+//
+//    void removeModelPresenter();
 
     interface View {
         void setVideo(Video video);

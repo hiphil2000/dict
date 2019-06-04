@@ -26,11 +26,6 @@ import com.google.android.youtube.player.YouTubePlayerView;
 
 import java.util.List;
 
-import static com.example.dictionary.Model.YoutubeDataApi.YoutubeDataApiModel.PREF_ACCOUNT_NAME;
-import static com.example.dictionary.Model.YoutubeDataApi.YoutubeDataApiModel.REQUEST_ACCOUNT_PICKER;
-import static com.example.dictionary.Model.YoutubeDataApi.YoutubeDataApiModel.REQUEST_AUTHORIZATION;
-import static com.example.dictionary.Model.YoutubeDataApi.YoutubeDataApiModel.REQUEST_GOOGLE_PLAY_SERVICES;
-
 public class YoutubeActivity extends YouTubeBaseActivity implements YoutubePresenter.View {
     private YouTubePlayerView ytb_view;
     private YouTubePlayer ytb_player;
@@ -49,9 +44,8 @@ public class YoutubeActivity extends YouTubeBaseActivity implements YoutubePrese
         initActivity();
         presenter = new YoutubePresenterImpl(YoutubeActivity.this);
         presenter.setView(this);
-        presenter.setModelPresenter();
         Video video = (Video) param.getSerializableExtra("video");
-        presenter.getFullVideo(video);
+        presenter.getDetail(video.Video_ID);
     }
 
     private void initActivity() {
@@ -86,7 +80,6 @@ public class YoutubeActivity extends YouTubeBaseActivity implements YoutubePrese
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        presenter.removeModelPresenter();
         finish();
     }
 
@@ -103,43 +96,6 @@ public class YoutubeActivity extends YouTubeBaseActivity implements YoutubePrese
             captionWatcher.setCaption(currentVideo.Captions.get(0));
         }
         initYoutubeView();
-    }
-
-    @Override
-    public void onActivityResult(
-            int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch(requestCode) {
-            case REQUEST_GOOGLE_PLAY_SERVICES:
-                if (resultCode != RESULT_OK) {
-                    pushResultMessage("This app requires Google Play Services. Please install " +
-                            "Google Play Services on your device and relaunch this app.");
-                } else {
-                    ((YoutubePresenterImpl)presenter).getDataFromApi();
-                }
-                break;
-            case REQUEST_ACCOUNT_PICKER:
-                if (resultCode == RESULT_OK && data != null &&
-                        data.getExtras() != null) {
-                    String accountName =
-                            data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-                    if (accountName != null) {
-                        SharedPreferences settings =
-                                getPreferences(Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = settings.edit();
-                        editor.putString(PREF_ACCOUNT_NAME, accountName);
-                        editor.apply();
-                        ((YoutubePresenterImpl)presenter).getCredential().setSelectedAccountName(accountName);
-                        ((YoutubePresenterImpl)presenter).getDataFromApi();
-                    }
-                }
-                break;
-            case REQUEST_AUTHORIZATION:
-                if (resultCode == RESULT_OK) {
-                    ((YoutubePresenterImpl)presenter).getDataFromApi();
-                }
-                break;
-        }
     }
 
     @Override
@@ -177,13 +133,13 @@ public class YoutubeActivity extends YouTubeBaseActivity implements YoutubePrese
         @Override
         public void run() {
             isRunning = true;
-            now = caption.Snippets.get(0);
+            now = caption.Snippets.get(idx);
             while(isRunning) {
                 try {
                     long nowtime = ytb_player.getCurrentTimeMillis();
-                    Log.d("captionwatcher", "nt: " + nowtime + ", end: " + now.Subtitle_EndTime.getTime() + ", start: " + now.Subtitle_StartTime.getTime());
+                    Log.d("captionwatcher", "nt: " + nowtime + ", end: " + now.Subtitle_EndTime.getTime() + ", start: " + now.Subtitle_StartTime.getTime() + "("+idx+")");
                     if (nowtime > now.Subtitle_EndTime.getTime()) {
-                        idx = idx + 1 > caption.Snippets.size() ? caption.Snippets.size() - 1 : idx + 1;
+                        idx = idx + 1 >= caption.Snippets.size() ? caption.Snippets.size() - 1 : idx + 1;
                     }
                         now = caption.Snippets.get(idx);
                         postToMain();
